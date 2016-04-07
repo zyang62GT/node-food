@@ -1,7 +1,7 @@
 {
-  "name"         : "node-todo",
+  "name"         : "node-food",
   "version"      : "0.0.1",
-  "description"  : "Simple todo application.",
+  "description"  : "Simple food application.",
   "main"         : "server.js",
   "author"       : "Scotch",
   "dependencies" : {
