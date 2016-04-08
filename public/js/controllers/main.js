@@ -12,8 +12,14 @@ angular.module('foodController', [])
 			.success(function(data) {
 				$scope.foods = data;
 				$scope.loading = false;
+				$scope.totalPrice();
 			});
-
+		$scope.totalPrice = function(){
+            		Foods.total()
+                		.success(function (data) {
+                    		$scope.total = data;
+                		})
+        	};
 		// CREATE ==================================================================
 		// when submitting the add form, send the text to the node API
 		$scope.createFood = function() {
@@ -31,6 +37,7 @@ angular.module('foodController', [])
 						$scope.loading = false;
 						$scope.formData = {}; // clear the form so our user is ready to enter another
 						$scope.foods = data; // assign our new list of foods
+						$scope.totalPrice();
 					});
 			}
 		};
@@ -45,6 +52,7 @@ angular.module('foodController', [])
 				.success(function(data) {
 					$scope.loading = false;
 					$scope.foods = data; // assign our new list of foods
+					$scope.totalPrice();
 				});
 		};
 	}]);

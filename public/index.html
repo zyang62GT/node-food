@@ -17,6 +17,15 @@
 		body 					{ padding-top:50px; }
 		#food-list 				{ margin-bottom:30px; }
 		#food-form 	 			{ margin-bottom:50px; }
+		.chart div {
+		  font: 10px sans-serif;
+		  background-color: steelblue;
+		  text-align: right;
+		  padding: 3px;
+		  margin: 1px;
+		  color: white;
+		}
+
 	</style>
 
 	<!-- SPELLS -->
@@ -25,6 +34,24 @@
 	<script src="js/controllers/main.js"></script> <!-- load up our controller -->
 	<script src="js/services/foods.js"></script> <!-- load our food service -->
 	<script src="js/core.js"></script> <!-- load our main application -->
+	<script src="//d3js.org/d3.v3.min.js"></script>
+	<script>
+
+	var data = [4, 8, 15, 16, 23, 42];
+
+	var x = d3.scale.linear()
+    	.domain([0, d3.max(data)])
+    	.range([0, 420]);
+
+	d3.select(".chart")
+ 	 .selectAll("div")
+   	 .data(data)
+ 	 .enter().append("div")
+  	  .style("width", function(d) { return x(d) + "px"; })
+  	  .text(function(d) { return d; });
+
+	</script>
+
 
 </head>
 <!-- SET THE CONTROLLER -->
@@ -45,7 +72,7 @@
 				<!-- LOOP OVER THE TODOS IN $scope.foods -->
 				<div class="checkbox" ng-repeat="food in foods">
 					<label>
-						<input type="checkbox" ng-click="deleteFood(food._id)"> {{ food.name }} {{food.price}}
+						<input type="checkbox" ng-click="deleteFood(food._id)"> {{ food.name }} -${{food.price}}
 					</label>
 					
 				</div>
@@ -53,11 +80,14 @@
 				<p class="text-center" ng-show="loading">
 					<span class="fa fa-spinner fa-spin fa-3x"></span>
 				</p>
-
+            			<p>
+                			<label>Total: ${{total}}</label>
+           			 </p>
+				<div class="chart"></div>
 			</div>
-		</div>
+			</div>
 
-		<!-- FORM TO CREATE TODOS -->
+	<!-- FORM TO CREATE TODOS -->
 		<div id="food-form" class="row">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<form>
@@ -66,7 +96,7 @@
 						<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
 						<input type="text" class="form-control input-lg text-center" name = "name" placeholder="name" ng-model="formData.name">
 					
-						<input type="text" class="form-control input-lg text-center" name = "price" placeholder="price" ng-model="formData.price">
+						<input type="number" class="form-control input-lg text-center" name = "price" placeholder="price" ng-model="formData.price">
 					</div>
 					<!-- createToDo() WILL CREATE NEW TODOS -->
 					<button type="submit" class="btn btn-primary btn-lg" ng-click="createFood()">Add</button>

@@ -11,8 +11,26 @@ function getFoods(res) {
         res.json(foods); // return all foods in JSON format
     });
 }
-;
 
+function getTotal(res){
+    Food.aggregate([
+        {$group: {
+            _id: null,
+            count: {$sum:  "$price"}
+        }}
+    ], function (err, total) {
+        if (err) {
+            res.send(err);
+        }
+        if(total.length > 0){
+            res.json(total[0].count);
+        }else{
+            res.json(0);
+        }
+
+    })
+
+}
 module.exports = function (app) {
 
     // api ---------------------------------------------------------------------
@@ -21,7 +39,9 @@ module.exports = function (app) {
         // use mongoose to get all foods in the database
         getFoods(res);
     });
-
+    app.get('/api/total', function (req, res) {
+        getTotal(res);
+    });
     // create food and send back all foods after creation
     app.post('/api/foods', function (req, res) {
 
